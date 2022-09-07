@@ -1,6 +1,7 @@
 package com.bosonit.DB1EjercicioCRUD.persona.application;
 
-
+import com.bosonit.DB1EjercicioCRUD.exceptions.EntityNotFoundException;
+import com.bosonit.DB1EjercicioCRUD.exceptions.UnprocessableEntityException;
 import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.input.PersonaInputDTO;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.output.PersonaOutputDTO;
@@ -8,7 +9,6 @@ import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.repository.PersonaRe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,22 +21,30 @@ public class PersonaServiceImpl implements PersonaService {
 
      @Override
      public List<PersonaOutputDTO> findByName(String name) {
+         if (name == null) {
+             throw new UnprocessableEntityException("Nombre no proporcionado",422);
+         }
 
          List<PersonaOutputDTO> listaOutByName = new ArrayList<>();
+         List<Persona> personaList =  personaRepository.findPersonaByName(name);
 
-         for (Persona p: personaRepository.findPersonaByName(name)) {
+         if (personaList.size() == 0) {
+             throw new com.bosonit.DB1EjercicioCRUD.exceptions.EntityNotFoundException("No hay ninguna persona con ese nombre", 422);
+         }
+
+         for (Persona p: personaList) {
              listaOutByName.add(new PersonaOutputDTO(p));
          }
 
         return listaOutByName;
      }
     @Override
-    public PersonaOutputDTO addPersona(PersonaInputDTO personaInputDTO) throws Exception {
+    public PersonaOutputDTO addPersona(PersonaInputDTO personaInputDTO) {
         if (!personaInputDTO.getCompanyEmail().contains("@")) {
-            throw new Exception("El email de la compañia no es valido");
+            throw new UnprocessableEntityException("El email de la compañia no es valido", 422);
         }
         if (!personaInputDTO.getPersonalEmail().contains("@")) {
-            throw new Exception("El email personal no es valido");
+            throw new UnprocessableEntityException("El email personal no es valido", 422);
         }
 
         Persona persona = personaInputDTO.PersonaInputDTO();
@@ -52,8 +60,13 @@ public class PersonaServiceImpl implements PersonaService {
     @Override
     public List<PersonaOutputDTO> getAllPersonas() {
         List<PersonaOutputDTO> listadoOut = new ArrayList<>();
+        List<Persona> personaList = personaRepository.findAll();
 
-        for (Persona p: personaRepository.findAll()) {
+        if (personaList.size() == 0) {
+            throw new EntityNotFoundException("No hay personas asignadas", 404);
+        }
+
+        for (Persona p: personaList) {
              listadoOut.add(new PersonaOutputDTO(p));
          }
 
@@ -64,8 +77,8 @@ public class PersonaServiceImpl implements PersonaService {
     public PersonaOutputDTO getPersonaById(String id) {
 
          Optional<Persona> p = personaRepository.findById(id);
-         if (p == null) {
-             throw new EntityNotFoundException("NO HAY UNA PERSONA CON EL ID " + id);
+         if (p.isEmpty()) {
+             throw new EntityNotFoundException("NO HAY UNA PERSONA CON EL ID " + id, 404);
          }
          return new PersonaOutputDTO(p.get());
     }
@@ -73,7 +86,7 @@ public class PersonaServiceImpl implements PersonaService {
     @Override
     public void deletePersonaById(String id) {
          if (id == null) {
-             throw new EntityNotFoundException("NO SE HA ENCONTRADO DICHA PERSONA A ELIMINAR");
+             throw new EntityNotFoundException("NO SE HA ENCONTRADO DICHA PERSONA A ELIMINAR", 404);
          } else {
              personaRepository.deleteById(id);
          }
@@ -83,11 +96,11 @@ public class PersonaServiceImpl implements PersonaService {
     @Override
     public PersonaOutputDTO updatePersonaById(String id, String password) {
          Optional<Persona> personaAActualizar = personaRepository.findById(id);
-        if (personaAActualizar.get() != null) {
+        if (personaAActualizar.isPresent()) {
             personaAActualizar.get().setPassword(password);
             personaRepository.saveAndFlush(personaAActualizar.get());
-        } else if (personaAActualizar.get() == null) {
-            throw new EntityNotFoundException("NO SE HA ENCONTRADO NINGUNA PERSONA CON ESE ID");
+        } else {
+            throw new EntityNotFoundException("NO SE HA ENCONTRADO NINGUNA PERSONA CON ESE ID", 404);
         }
         return new PersonaOutputDTO(personaAActualizar.get());
     }

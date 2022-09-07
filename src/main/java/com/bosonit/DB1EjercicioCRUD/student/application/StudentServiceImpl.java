@@ -1,9 +1,9 @@
 package com.bosonit.DB1EjercicioCRUD.student.application;
 
+import com.bosonit.DB1EjercicioCRUD.exceptions.EntityNotFoundException;
 import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.repository.PersonaRepository;
 import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
-import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.controller.output.ProfesorOutputDTO;
 import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.repository.ProfesorRepository;
 import com.bosonit.DB1EjercicioCRUD.student.domain.Student;
 import com.bosonit.DB1EjercicioCRUD.student.infraestructure.controller.input.StudentInputDTO;
@@ -12,9 +12,7 @@ import com.bosonit.DB1EjercicioCRUD.student.infraestructure.repository.StudentRe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,15 +33,15 @@ public class StudentServiceImpl implements  StudentService{
         System.out.println("ESTE ES EL ID QUE NOS LLEGA Y PASAMOS PARA BUSCAR: " + studentInputDTO.getIdPersona());
         Persona persona = personaRepository.findById(studentInputDTO.getIdPersona()).orElse(null);
         if (persona == null) {
-            throw new EntityNotFoundException("LA PERSONA A ASIGNAR NO EXISTE");
+            throw new EntityNotFoundException("LA PERSONA A ASIGNAR NO EXISTE", 404);
         }
-        System.out.println("ESTA ES LA PERSONA QUE NOS LLEGA: " + persona.toString());
+        System.out.println("ESTA ES LA PERSONA QUE NOS LLEGA: " + persona);
 
         Profesor profesor = profesorRepository.findById(studentInputDTO.getIdProfesor()).orElse(null);
         if (profesor == null) {
-            throw new EntityNotFoundException("EL PROFESOR A A SIGNAR NO EXISTE");
+            throw new EntityNotFoundException("EL PROFESOR A A SIGNAR NO EXISTE", 404);
         }
-        System.out.println("ESTE ES EL PROFESOR QUE NOS LLEGA: " + profesor.toString());
+        System.out.println("ESTE ES EL PROFESOR QUE NOS LLEGA: " + profesor);
         Student student = studentInputDTO.StudentInputDTO(persona, profesor);
 
         student.setPersona(persona);
@@ -64,7 +62,7 @@ public class StudentServiceImpl implements  StudentService{
             System.err.println("ANIADO LAS COSAS A LA LISTA");
             listaOut.add(new StudentOutputDTO(s));
         }
-        System.err.println("ESTA ES LA LISTAOUT: " + listaOut.toString());
+        System.err.println("ESTA ES LA LISTAOUT: " + listaOut);
         return listaOut;
     }
 
@@ -74,7 +72,7 @@ public class StudentServiceImpl implements  StudentService{
         if (student == null) {
             throw new Exception("EL ESTUDIANTE NO HA SIDO LOCALIZADO");
         }
-        System.out.println("EL ESTUDIANTE ES: " + student.toString());
+        System.out.println("EL ESTUDIANTE ES: " + student);
         return new StudentOutputDTO(student);
     }
 

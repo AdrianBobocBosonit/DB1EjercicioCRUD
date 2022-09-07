@@ -1,7 +1,8 @@
 package com.bosonit.DB1EjercicioCRUD.profesor.application;
 
+import com.bosonit.DB1EjercicioCRUD.exceptions.EntityNotFoundException;
+import com.bosonit.DB1EjercicioCRUD.exceptions.UnprocessableEntityException;
 import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
-import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.output.PersonaOutputDTO;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.repository.PersonaRepository;
 import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
 import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.controller.input.ProfesorInputDTO;
@@ -24,19 +25,26 @@ public class ProfesorServiceImpl implements ProfesorService{
     private PersonaRepository personaRepository;
 
     @Override
-    public ProfesorOutputDTO getByIdPersona(String idPersona) throws Exception{
+    public ProfesorOutputDTO getByIdPersona(String idPersona) {
         Profesor profesor = profesorRepository.findProfesorByIdPersona(idPersona);
         if (profesor == null) {
-            throw new Exception("EL PROFESOR CON DICHO ID PERSONA NO EXISTE");
+            throw new EntityNotFoundException("EL PROFESOR CON DICHO ID PERSONA NO EXISTE", 404);
         }
         return new ProfesorOutputDTO(profesor);
     }
 
     @Override
-    public ProfesorOutputDTO addProfesor(ProfesorInputDTO profesorInputDTO) throws Exception {
+    public ProfesorOutputDTO addProfesor(ProfesorInputDTO profesorInputDTO) {
+        if (profesorInputDTO.getIdPersona() == null) {
+            throw new UnprocessableEntityException("SE HA DE PROPORCIONAR UN IDPERSONA", 422);
+        }
 
         Optional<Persona> persona = personaRepository.findById(profesorInputDTO.getIdPersona());
-        System.err.println("ESTA ES LA PERSONA QUE SE NOS DEVUELVE: " + persona.get());
+        System.err.println("ESTA ES LA PERSONA QUE SE NOS DEVUELVE: " + persona);
+
+        if (persona.isEmpty()) {
+            throw new EntityNotFoundException("LA PERSONA NO HA PODIDO SER ENCONTRADA", 404);
+        }
 
         Profesor profesor = profesorInputDTO.ProfesorInputDTO(persona.get());
         profesor.setPersona(persona.get());
@@ -70,10 +78,16 @@ public class ProfesorServiceImpl implements ProfesorService{
 
     @Override
     public void deleteProfesorByIdProfesor(String idProfesor) throws Exception{
-        Profesor profesor = profesorRepository.findById(idProfesor).orElse(null);
         if (idProfesor == null) {
-            throw new Exception("EL ID PROFESOR PROPORCIONADO NO EXISTE");
+            throw new Exception("SE HA DE PROPORCIONAR UN ID DE ALGUN PROFESOR");
         }
+
+        Profesor profesor = profesorRepository.findById(idProfesor).orElse(null);
+
+        if (profesor == null) {
+            throw new EntityNotFoundException("EL POFESOR BUSCADO NO HA PODIDOD SER ENCONTRADO", 404);
+        }
+
         profesorRepository.delete(profesor);
     }
 
