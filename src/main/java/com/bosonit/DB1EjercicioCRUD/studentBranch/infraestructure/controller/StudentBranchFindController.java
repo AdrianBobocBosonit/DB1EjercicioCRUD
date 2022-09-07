@@ -22,13 +22,4 @@ public class StudentBranchFindController {
         return studentBranchService.getAllStudentBranch();
     }
 
-    @GetMapping("/branch/{idBranch}")
-    public StudentBranchOutputDTO getStudentBranchByIdBranch(@PathVariable String idBranch) {
-        return studentBranchService.getStudentBranchByIdBranch(idBranch);
-    }
-
-    @GetMapping("/student/{idStudent}")
-    public StudentBranchOutputDTO getStudentBranchByIdStudent(@PathVariable String idStudent) {
-        return studentBranchService.getStudentBranchByIdStudent(idStudent);
-    }
 }

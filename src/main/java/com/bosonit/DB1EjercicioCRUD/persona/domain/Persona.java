@@ -1,20 +1,17 @@
 package com.bosonit.DB1EjercicioCRUD.persona.domain;
 
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.input.PersonaInputDTO;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "PERSONA")
 public class Persona {
@@ -24,7 +21,7 @@ public class Persona {
             parameters = @Parameter(name = "prefijo", value = "persona"),
             strategy = "com.bosonit.DB1EjercicioCRUD.MiGenerador"
     )
-    private String id;
+    private String idPerson;
 
     @Column(length = 10, nullable = false)
     private String usuario;
@@ -56,7 +53,7 @@ public class Persona {
     private Date terminationDate;
 
     public Persona(PersonaInputDTO personaInputDTO) {
-        setId(personaInputDTO.getId());
+        setIdPerson(personaInputDTO.getId());
         setCity(personaInputDTO.getCity());
         setActive(personaInputDTO.getActive());
         setCompanyEmail(personaInputDTO.getCompanyEmail());

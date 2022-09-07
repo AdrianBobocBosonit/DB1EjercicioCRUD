@@ -3,15 +3,17 @@ package com.bosonit.DB1EjercicioCRUD.student.domain;
 import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
 import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
 import com.bosonit.DB1EjercicioCRUD.student.infraestructure.controller.input.StudentInputDTO;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.bosonit.DB1EjercicioCRUD.studentBranch.domain.StudentBranch;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Student {
@@ -22,30 +24,32 @@ public class Student {
             strategy = "com.bosonit.DB1EjercicioCRUD.MiGenerador"
     )
     private String idStudent;
-    private String idPersona;
+    //private String idPersona;
 
-    /*@OneToOne
+    @OneToOne
     @JoinColumn(name = "id_person")
-    private Persona persona;*/
+    private Persona persona;
 
     @Column(nullable = false)
     private int numHours;
     private String comments;
-    private String idProfesor;
+    //private String idProfesor;
 
     /*@ManyToOne(fetch = FetchType.LAZY)
+     @JoinColumn(name = "id_profesor")*/
+
+    /*@ManyToMany()
+    @JoinTable(name = "student_profesor",
+                joinColumns = {@JoinColumn(name = "student_id")},
+                inverseJoinColumns = {@JoinColumn(name = "profesor_id")})
+    private List<Profesor> profesorList;*/
+
+    @ManyToOne
     @JoinColumn(name = "id_profesor")
-    private Profesor profesor;*/
+    private Profesor profesor;
 
     @Column(nullable = false)
     private String branch;
 
-    public Student(StudentInputDTO studentInputDTO) {
-        setIdStudent(studentInputDTO.getIdStudent());
-        //setIdPersona(studentInputDTO.getIdPersona());
-        setNumHours(studentInputDTO.getNumHours());
-        setComments(studentInputDTO.getComments());
-        //setIdProfesor(studentInputDTO.getIdProfesor());
-        setBranch(studentInputDTO.getBranch());
-    }
+
 }

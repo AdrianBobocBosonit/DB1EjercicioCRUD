@@ -18,9 +18,4 @@ public class StudentBranchDeleteController {
     public void deleteStudentBranchByIdBranch(@PathVariable String idBranch) {
         studentBranchService.deleteStudentBranchByIdBranch(idBranch);
     }
-
-    @DeleteMapping("/student/{idStudent}")
-    public void deleteStudentBranchByIdStudent(@PathVariable String idStudent) {
-        studentBranchService.deleteStudentBranchByIdStudent(idStudent);
-    }
 }

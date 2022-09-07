@@ -18,11 +18,11 @@ public class StudentInputDTO {
     public Student StudentInputDTO(Persona persona, Profesor profesor) {
         Student student = new Student();
         student.setIdStudent(this.getIdStudent());
-        student.setIdPersona(this.getIdPersona());
+        //student.setIdPersona(this.getIdPersona());
         //student.setPersona(persona);
         student.setNumHours(this.getNumHours());
         student.setComments(this.getComments());
-        student.setIdProfesor(this.getIdProfesor());
+        //student.setIdProfesor(this.getIdProfesor());
         //student.setProfesor(profesor);
         student.setBranch(this.getBranch());
         return student;

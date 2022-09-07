@@ -14,11 +14,9 @@ public interface StudentService {
 
     StudentOutputDTO getStudentById(String idStudent) throws Exception;
 
-    List<StudentOutputDTO> getAllStudentsbyIdProfesor(String idProfesor);
+    StudentOutputDTO findByIdPersona(String idPerson);
 
     void deleteStudentByIdStudent(String idStudent);
 
     void deleteStudentByIdPerson(String idPerson);
-
-    StudentOutputDTO findByIdPersona(String idPerson);
 }

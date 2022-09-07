@@ -7,9 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProfesorRepository extends JpaRepository<Profesor, String> {
-    @Query("select p from Profesor p where p.idPersona = ?1")
+    @Query("select p from Profesor p where p.persona.idPerson = ?1")
     Profesor findProfesorByIdPersona(String idPersona);
 
-    @Query("delete from Profesor p where p.idPersona = ?1")
+    @Query("delete from Profesor p where p.persona.idPerson = ?1")
     void deleteProfesorByIdPersona(String idPersona);
 }

@@ -1,6 +1,8 @@
 package com.bosonit.DB1EjercicioCRUD.profesor.application;
 
+import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.output.PersonaOutputDTO;
+import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.repository.PersonaRepository;
 import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
 import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.controller.input.ProfesorInputDTO;
 import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.controller.output.ProfesorOutputDTO;
@@ -18,6 +20,9 @@ public class ProfesorServiceImpl implements ProfesorService{
     @Autowired
     private ProfesorRepository profesorRepository;
 
+    @Autowired
+    private PersonaRepository personaRepository;
+
     @Override
     public ProfesorOutputDTO getByIdPersona(String idPersona) throws Exception{
         Profesor profesor = profesorRepository.findProfesorByIdPersona(idPersona);
@@ -29,7 +34,14 @@ public class ProfesorServiceImpl implements ProfesorService{
 
     @Override
     public ProfesorOutputDTO addProfesor(ProfesorInputDTO profesorInputDTO) throws Exception {
-        Profesor profesor = profesorInputDTO.ProfesorInputDTO();
+
+        Optional<Persona> persona = personaRepository.findById(profesorInputDTO.getIdPersona());
+        System.err.println("ESTA ES LA PERSONA QUE SE NOS DEVUELVE: " + persona.get());
+
+        Profesor profesor = profesorInputDTO.ProfesorInputDTO(persona.get());
+        profesor.setPersona(persona.get());
+        System.err.println("ESTA ES LA profesor.getPersona QUE SE QUEDA: " + profesor.getPersona());
+
         System.out.println("######################################################3");
         System.out.println(profesor);
         System.out.println("######################################################3");

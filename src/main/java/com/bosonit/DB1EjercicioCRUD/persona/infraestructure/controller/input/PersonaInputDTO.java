@@ -23,7 +23,7 @@ public class PersonaInputDTO {
 
     public Persona PersonaInputDTO() {
         Persona persona = new Persona();
-        persona.setId(this.getId());
+        persona.setIdPerson(this.getId());
         persona.setUsuario(this.getUsuario());
         persona.setPassword(this.getPassword());
         persona.setName(this.getName());

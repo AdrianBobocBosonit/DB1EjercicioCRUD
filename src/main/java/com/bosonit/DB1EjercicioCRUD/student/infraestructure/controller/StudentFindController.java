@@ -19,17 +19,15 @@ public class StudentFindController {
 
     @GetMapping
     public List<StudentOutputDTO> getAllStudents() throws Exception {
-        return studentService.getAllStudents();
+        System.err.println("ENTRO A LA LLAMADA");
+        List<StudentOutputDTO> listaDefinitiva = studentService.getAllStudents();
+        System.err.println("LA LISTA DEFINITIVA QUE SE PASA ES: " + listaDefinitiva);
+        return listaDefinitiva;
     }
 
     @GetMapping("/id/{idStudent}")
     public StudentOutputDTO getStudentById(@PathVariable String idStudent) throws Exception{
         return studentService.getStudentById(idStudent);
-    }
-
-    @GetMapping("/profesor/{idProfesor}")
-    public List<StudentOutputDTO> getAllStudentsByIdProfesor(@PathVariable String idProfesor) {
-        return studentService.getAllStudentsbyIdProfesor(idProfesor);
     }
 
     @GetMapping("/person/{idPerson}")

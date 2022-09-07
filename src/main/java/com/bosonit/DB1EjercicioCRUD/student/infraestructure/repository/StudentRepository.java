@@ -10,9 +10,10 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, String> {
-    @Query("select s from Student s where s.idProfesor = ?1")
-    List<Student> findByIdProfesor(String idProfesor);
 
-    @Query("select s from Student s where s.idPersona = ?1")
+    @Query("select s from Student s where s.persona.idPerson = ?1")
     Student findByIdPersona(String idPerson);
+
+    @Query("select s from Student s where s.branch = ?1")
+    List<Student> findByIdBranch(String idBranch);
 }

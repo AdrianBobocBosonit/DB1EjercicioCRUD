@@ -9,10 +9,5 @@ import java.util.List;
 
 @Repository
 public interface StudentBranchRepository extends JpaRepository<StudentBranch, String> {
-    StudentBranch findStudentBranchByIdAsignatura(String idAsignatura);
 
-    StudentBranch findStudentBranchByIdStudent(String idStudent);
-
-    //@Query(value = "delete from student_branch where ", nativeQuery = true)
-    //void deleteStudentBranchByIdStudent(Integer idStudent);
 }

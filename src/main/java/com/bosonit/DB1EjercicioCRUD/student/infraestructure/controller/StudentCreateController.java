@@ -19,6 +19,8 @@ public class StudentCreateController {
     @PostMapping
     public StudentOutputDTO addStudent(@RequestBody StudentInputDTO studentInputDTO) {
         System.out.println("ESTOS SON LOS VALORES QUE NOS HAN LLEGADO: " + studentInputDTO);
-        return studentService.addStudent(studentInputDTO);
+        StudentOutputDTO studentDevuelto = studentService.addStudent(studentInputDTO);
+        System.out.println("EL STUDENT DEVUELTO AL FORNTEND SERÍA: " + studentDevuelto.toString());
+        return studentDevuelto;
     }
 }

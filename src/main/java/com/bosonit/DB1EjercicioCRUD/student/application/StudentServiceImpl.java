@@ -1,5 +1,10 @@
 package com.bosonit.DB1EjercicioCRUD.student.application;
 
+import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
+import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.repository.PersonaRepository;
+import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
+import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.controller.output.ProfesorOutputDTO;
+import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.repository.ProfesorRepository;
 import com.bosonit.DB1EjercicioCRUD.student.domain.Student;
 import com.bosonit.DB1EjercicioCRUD.student.infraestructure.controller.input.StudentInputDTO;
 import com.bosonit.DB1EjercicioCRUD.student.infraestructure.controller.output.StudentOutputDTO;
@@ -7,7 +12,9 @@ import com.bosonit.DB1EjercicioCRUD.student.infraestructure.repository.StudentRe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,19 +23,48 @@ public class StudentServiceImpl implements  StudentService{
 
     @Autowired
     StudentRepository studentRepository;
+    @Autowired
+    PersonaRepository personaRepository;
+
+    @Autowired
+    ProfesorRepository profesorRepository;
 
     @Override
     public StudentOutputDTO addStudent(StudentInputDTO studentInputDTO) {
-        Student student = studentInputDTO.StudentInputDTO(null, null);
+        System.out.println("ESTE ES EL STUDENTINPUTDTOP QUE NOS LLEGA: " + studentInputDTO.toString());
+        System.out.println("ESTE ES EL ID QUE NOS LLEGA Y PASAMOS PARA BUSCAR: " + studentInputDTO.getIdPersona());
+        Persona persona = personaRepository.findById(studentInputDTO.getIdPersona()).orElse(null);
+        if (persona == null) {
+            throw new EntityNotFoundException("LA PERSONA A ASIGNAR NO EXISTE");
+        }
+        System.out.println("ESTA ES LA PERSONA QUE NOS LLEGA: " + persona.toString());
+
+        Profesor profesor = profesorRepository.findById(studentInputDTO.getIdProfesor()).orElse(null);
+        if (profesor == null) {
+            throw new EntityNotFoundException("EL PROFESOR A A SIGNAR NO EXISTE");
+        }
+        System.out.println("ESTE ES EL PROFESOR QUE NOS LLEGA: " + profesor.toString());
+        Student student = studentInputDTO.StudentInputDTO(persona, profesor);
+
+        student.setPersona(persona);
+        student.setProfesor(profesor);
+
+        System.out.println("##################################################");
+        System.out.println("ESTE ES EL STUDENT FINAL: " + student);
+        System.out.println("##################################################");
         return new StudentOutputDTO(studentRepository.save(student));
     }
 
     @Override
     public List<StudentOutputDTO> getAllStudents() {
+        System.err.println("ENTRO AL METODO DE LA IMPLEMENTACION");
         List<StudentOutputDTO> listaOut = new ArrayList<>();
+        System.err.println("CREO LA LISTA");
         for (Student s: studentRepository.findAll()) {
+            System.err.println("ANIADO LAS COSAS A LA LISTA");
             listaOut.add(new StudentOutputDTO(s));
         }
+        System.err.println("ESTA ES LA LISTAOUT: " + listaOut.toString());
         return listaOut;
     }
 
@@ -43,12 +79,9 @@ public class StudentServiceImpl implements  StudentService{
     }
 
     @Override
-    public List<StudentOutputDTO> getAllStudentsbyIdProfesor(String idProfesor) {
-        List<StudentOutputDTO> outputDTOList = new ArrayList<>();
-        for (Student s: studentRepository.findByIdProfesor(idProfesor)) {
-            outputDTOList.add(new StudentOutputDTO(s));
-        }
-        return outputDTOList;
+    public StudentOutputDTO findByIdPersona(String idPerson) {
+        Student student = studentRepository.findByIdPersona(idPerson);
+        return new StudentOutputDTO(student);
     }
 
     @Override
@@ -58,15 +91,9 @@ public class StudentServiceImpl implements  StudentService{
     }
 
     @Override
-    public StudentOutputDTO findByIdPersona(String idPerson) {
-        Student student = studentRepository.findByIdPersona(idPerson);
-        return new StudentOutputDTO(student);
-    }
-
-    @Override
     public void deleteStudentByIdPerson(String idPerson) {
-        Student student = studentRepository.findByIdPersona(idPerson);
-        studentRepository.delete(student);
+        /*Student student = studentRepository.findByIdPersona(idPerson);
+        studentRepository.delete(student);*/
     }
 
 }

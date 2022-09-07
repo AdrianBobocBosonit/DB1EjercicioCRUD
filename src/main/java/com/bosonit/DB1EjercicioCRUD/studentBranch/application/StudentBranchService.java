@@ -14,12 +14,6 @@ public interface StudentBranchService {
 
     List<StudentBranchOutputDTO> getAllStudentBranch();
 
-    StudentBranchOutputDTO getStudentBranchByIdBranch(String idBranch);
-
-    StudentBranchOutputDTO getStudentBranchByIdStudent(String idStudent);
-
     void deleteStudentBranchByIdBranch(String idBranch);
 
-    @Query
-    void deleteStudentBranchByIdStudent(String idStudent);
 }

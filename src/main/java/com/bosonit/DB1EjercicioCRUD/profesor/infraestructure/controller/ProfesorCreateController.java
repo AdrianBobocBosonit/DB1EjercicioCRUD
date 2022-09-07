@@ -19,6 +19,8 @@ public class ProfesorCreateController {
     @PostMapping
     public ProfesorOutputDTO postProfesor(@RequestBody ProfesorInputDTO profesorInputDTO) throws Exception {
         System.out.println("ESTOS SON LOS VALORES QUE NOS HAN LLEGADO: " + profesorInputDTO);
-        return profesorService.addProfesor(profesorInputDTO);
+        ProfesorOutputDTO profesorOutputDTO = profesorService.addProfesor(profesorInputDTO);
+        System.out.println("A LA HORA DE CREAR EL PROFESOR ASÍ ES COMO QUEDA: " + profesorOutputDTO);
+        return profesorOutputDTO;
     }
 }

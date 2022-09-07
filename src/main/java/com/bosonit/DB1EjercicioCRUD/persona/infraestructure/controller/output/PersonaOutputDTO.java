@@ -22,7 +22,7 @@ public class PersonaOutputDTO {
     private Date TerminationDate;
 
     public PersonaOutputDTO(Persona persona) {
-        setId(persona.getId());
+        setId(persona.getIdPerson());
         setUsuario(persona.getUsuario());
         setPassword(persona.getPassword());
         setName(persona.getName());

@@ -18,7 +18,9 @@ public class StudentBranchCreateController {
 
     @PostMapping
     public StudentBranchOutputDTO postStudentBranch(@RequestBody StudentBranchInputDTO studentBranchInputDTO) throws Exception{
-        System.out.println("ESTOS SON LOS VALORES QUE NOS HA LLEGADO: " + studentBranchInputDTO);
-        return studentBranchService.addStudentBranch(studentBranchInputDTO);
+        System.err.println("ESTOS SON LOS VALORES QUE NOS HA LLEGADO: " + studentBranchInputDTO);
+        StudentBranchOutputDTO studentBranchOutputDTO = studentBranchService.addStudentBranch(studentBranchInputDTO);
+        System.err.println("ESTOS SON LOS VALORES CON LOS QUE SE TERMINA GUARDANDO: " + studentBranchOutputDTO);
+        return studentBranchOutputDTO;
     }
 }
