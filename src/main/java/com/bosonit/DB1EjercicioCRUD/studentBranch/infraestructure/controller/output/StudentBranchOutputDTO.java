@@ -12,7 +12,7 @@ public class StudentBranchOutputDTO {
 
     private String idAsignatura;
     private String asignatura;
-    private List<Student> studentList;
+    //private List<Student> studentList;
     private String comments;
     private Date initialDate;
     private Date finishDate;
@@ -20,7 +20,7 @@ public class StudentBranchOutputDTO {
     public StudentBranchOutputDTO(StudentBranch studentBranch) {
         setIdAsignatura(studentBranch.getIdAsignatura());
         setAsignatura(studentBranch.getAsignatura());
-        setStudentList(studentBranch.getStudents());
+        //setStudentList(studentBranch.getStudents());
         setComments(studentBranch.getComments());
         setInitialDate(studentBranch.getInitialDate());
         setFinishDate(studentBranch.getFinishDate());

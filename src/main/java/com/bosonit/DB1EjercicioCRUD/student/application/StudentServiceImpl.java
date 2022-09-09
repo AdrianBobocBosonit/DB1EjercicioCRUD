@@ -1,6 +1,7 @@
 package com.bosonit.DB1EjercicioCRUD.student.application;
 
 import com.bosonit.DB1EjercicioCRUD.exceptions.EntityNotFoundException;
+import com.bosonit.DB1EjercicioCRUD.exceptions.UnprocessableEntityException;
 import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.repository.PersonaRepository;
 import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
@@ -43,6 +44,10 @@ public class StudentServiceImpl implements  StudentService{
         }
         System.out.println("ESTE ES EL PROFESOR QUE NOS LLEGA: " + profesor);
         Student student = studentInputDTO.StudentInputDTO(persona, profesor);
+
+        if (profesorRepository.findProfesorByIdPersona(studentInputDTO.getIdPersona()) != null) {
+            throw new UnprocessableEntityException("LA PERSONA QUE SE ESTA INTENTANDO ASIGNAR ES UN PROFESOR", 422);
+        }
 
         student.setPersona(persona);
         student.setProfesor(profesor);
@@ -90,8 +95,8 @@ public class StudentServiceImpl implements  StudentService{
 
     @Override
     public void deleteStudentByIdPerson(String idPerson) {
-        /*Student student = studentRepository.findByIdPersona(idPerson);
-        studentRepository.delete(student);*/
+        Student student = studentRepository.findByIdPersona(idPerson);
+        studentRepository.delete(student);
     }
 
 }

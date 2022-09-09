@@ -29,19 +29,27 @@ public class StudentBranchServiceImpl implements StudentBranchService{
 
     @Override
     public StudentBranchOutputDTO addStudentBranch(StudentBranchInputDTO studentBranchInputDTO) throws Exception {
+        System.err.println("ESTE ES EL ID ESTUDIANTE QUE NOS LLEGA A LA IMPLEMENTACION: " +studentBranchInputDTO.getIdProfesor());
+
         Optional<Profesor> profesor = profesorRepository.findById(studentBranchInputDTO.getIdProfesor());
 
-        System.err.println("ESTE ES EL ID ESTUDIANTE QUE NOS LLEGA A LA IMPLEMENTACION: " +studentBranchInputDTO.getIdStudent());
+        //System.err.println("ESTE ES EL ID ESTUDIANTE QUE NOS LLEGA A LA IMPLEMENTACION: " +studentBranchInputDTO.getIdStudent());
 
-        List<Student> student = studentRepository.findByIdBranch(studentBranchInputDTO.getIdStudent());
+        //List<Student> student;
 
-        System.err.println("ESTO ES LO QUE MIDE LA LISTA DE ESTUDIANTES: " +    student.size());
-        System.err.println("ESTA ES LA LISTA QUE SE QUEDA TRAS LA BUSQUEDA: ");
-        for (Student s: student) {
+        //System.err.println("CREO EL ESTUDIANTE");
+
+        //student = studentRepository.findByIdBranch(studentBranchInputDTO.getIdStudent());
+
+        System.err.println("HAGO LA BUSQUEDA, ESTO RESULTA EN: " + studentBranchInputDTO);
+
+       // System.err.println("ESTO ES LO QUE MIDE LA LISTA DE ESTUDIANTES: " +    student.size());
+        //System.err.println("ESTA ES LA LISTA QUE SE QUEDA TRAS LA BUSQUEDA: ");
+        /*for (Student s: student) {
             System.out.println(s.toString());
-        }
+        }*/
 
-        StudentBranch studentBranch = studentBranchInputDTO.studentBranchInputDTO(profesor.get(), student);
+        StudentBranch studentBranch = studentBranchInputDTO.studentBranchInputDTO(profesor.get());
 
         studentBranchRepository.save(studentBranch);
         return new StudentBranchOutputDTO(studentBranchRepository.save(studentBranch));

@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @Entity
 public class Profesor {

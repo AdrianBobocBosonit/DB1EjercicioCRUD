@@ -49,7 +49,8 @@ public class Student {
     private Profesor profesor;
 
     @Column(nullable = false)
-    private String branch;
+    @ManyToMany(mappedBy = "students")
+    private List<StudentBranch> branch;
 
 
 }

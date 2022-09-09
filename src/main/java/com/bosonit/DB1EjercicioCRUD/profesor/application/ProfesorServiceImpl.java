@@ -8,6 +8,7 @@ import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
 import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.controller.input.ProfesorInputDTO;
 import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.controller.output.ProfesorOutputDTO;
 import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.repository.ProfesorRepository;
+import com.bosonit.DB1EjercicioCRUD.student.infraestructure.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,9 @@ public class ProfesorServiceImpl implements ProfesorService{
 
     @Autowired
     private PersonaRepository personaRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Override
     public ProfesorOutputDTO getByIdPersona(String idPersona) {
@@ -44,6 +48,10 @@ public class ProfesorServiceImpl implements ProfesorService{
 
         if (persona.isEmpty()) {
             throw new EntityNotFoundException("LA PERSONA NO HA PODIDO SER ENCONTRADA", 404);
+        }
+
+        if (studentRepository.findByIdPersona(profesorInputDTO.getIdPersona()) != null) {
+            throw new UnprocessableEntityException("EL PROFESOR QUE ESTAS INTENTANDO ASIGNAR ES UN ESTUDIANTE", 422);
         }
 
         Profesor profesor = profesorInputDTO.ProfesorInputDTO(persona.get());

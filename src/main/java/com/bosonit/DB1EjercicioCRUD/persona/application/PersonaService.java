@@ -20,4 +20,6 @@ public interface PersonaService {
     void deletePersonaById(String id);
 
     PersonaOutputDTO updatePersonaById(String id, String password) throws Exception;
+
+    PersonaOutputDTO findFullByIdPersona(String idPersona);
 }

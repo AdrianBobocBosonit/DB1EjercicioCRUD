@@ -6,6 +6,10 @@ import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.input.PersonaInputDTO;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.output.PersonaOutputDTO;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.repository.PersonaRepository;
+import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
+import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.repository.ProfesorRepository;
+import com.bosonit.DB1EjercicioCRUD.student.domain.Student;
+import com.bosonit.DB1EjercicioCRUD.student.infraestructure.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,12 @@ public class PersonaServiceImpl implements PersonaService {
 
     @Autowired
     private PersonaRepository personaRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private ProfesorRepository profesorRepository;
 
      @Override
      public List<PersonaOutputDTO> findByName(String name) {
@@ -103,5 +113,33 @@ public class PersonaServiceImpl implements PersonaService {
             throw new EntityNotFoundException("NO SE HA ENCONTRADO NINGUNA PERSONA CON ESE ID", 404);
         }
         return new PersonaOutputDTO(personaAActualizar.get());
+    }
+
+    @Override
+    public PersonaOutputDTO findFullByIdPersona(String idPersona) {
+        System.out.println("ESTE ES EL IDPERSONA QUE LLEGA: " + idPersona);
+        PersonaOutputDTO personaOutputDTO;
+
+        Persona persona = personaRepository.findById(idPersona).orElse(null);
+        System.err.println("ESTA ES LA PERSONA: " + persona);
+
+        Profesor profesor = profesorRepository.findProfesorByIdPersona(idPersona);
+        System.out.println("ESTE ES EL PROFESOR: " + profesor);
+        if (profesor != null) {
+
+            personaOutputDTO = new PersonaOutputDTO(persona, profesor);
+            return personaOutputDTO;
+        }
+
+        Student student = studentRepository.findByIdPersona(idPersona);
+        System.out.println("ESTE ES EL STUDENT: " + student);
+        if (student != null) {
+
+            personaOutputDTO = new PersonaOutputDTO(persona, student);
+            return personaOutputDTO;
+        }
+
+        System.err.println("HACER RETURN NULL");
+        return null;
     }
 }

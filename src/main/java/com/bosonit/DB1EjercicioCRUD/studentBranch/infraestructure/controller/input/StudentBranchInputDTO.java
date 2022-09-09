@@ -20,10 +20,10 @@ public class StudentBranchInputDTO {
     private Date initialDate;
     private Date finishDate;
 
-    public StudentBranch studentBranchInputDTO(Profesor profesor, List<Student> studentList) {
+    public StudentBranch studentBranchInputDTO(Profesor profesor) {
         StudentBranch studentBranch = new StudentBranch();
         studentBranch.setProfesor(profesor);
-        studentBranch.setStudents(studentList);
+        //studentBranch.setStudents(studentList);
         studentBranch.setAsignatura(this.getAsignatura());
         studentBranch.setComments(this.getComments());
         studentBranch.setInitialDate(this.getInitialDate());

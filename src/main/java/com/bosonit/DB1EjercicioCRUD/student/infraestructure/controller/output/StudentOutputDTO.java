@@ -5,6 +5,7 @@ import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.output.Pe
 import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
 import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.controller.output.ProfesorOutputDTO;
 import com.bosonit.DB1EjercicioCRUD.student.domain.Student;
+import com.bosonit.DB1EjercicioCRUD.studentBranch.domain.StudentBranch;
 import lombok.Data;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class StudentOutputDTO {
     private String comments;
     //private String idProfesor;
     private Profesor profesor;
-    private String branch;
+    private List<StudentBranch> branch;
 
     public StudentOutputDTO(Student student) {
         setIdStudent(student.getIdStudent());
