@@ -3,10 +3,8 @@ package com.bosonit.DB1EjercicioCRUD.student.infraestructure.controller.input;
 import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
 import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
 import com.bosonit.DB1EjercicioCRUD.student.domain.Student;
-import com.bosonit.DB1EjercicioCRUD.studentBranch.domain.StudentBranch;
 import lombok.Data;
 
-import java.util.List;
 
 @Data
 public class StudentInputDTO {
@@ -16,7 +14,7 @@ public class StudentInputDTO {
     private int numHours;
     private String comments;
     private String idProfesor;
-    private List<String> branch;
+    private String idBranch;
 
     public Student StudentInputDTO(Persona persona, Profesor profesor) {
         Student student = new Student();

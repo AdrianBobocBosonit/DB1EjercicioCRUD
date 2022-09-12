@@ -2,7 +2,6 @@ package com.bosonit.DB1EjercicioCRUD.studentBranch.domain;
 
 import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
 import com.bosonit.DB1EjercicioCRUD.student.domain.Student;
-import com.bosonit.DB1EjercicioCRUD.studentBranch.infraestructure.controller.input.StudentBranchInputDTO;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 

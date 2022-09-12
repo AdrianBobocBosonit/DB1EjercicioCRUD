@@ -1,8 +1,8 @@
 package com.bosonit.DB1EjercicioCRUD.studentBranch.application;
 
+import com.bosonit.DB1EjercicioCRUD.exceptions.EntityNotFoundException;
 import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
 import com.bosonit.DB1EjercicioCRUD.profesor.infraestructure.repository.ProfesorRepository;
-import com.bosonit.DB1EjercicioCRUD.student.domain.Student;
 import com.bosonit.DB1EjercicioCRUD.student.infraestructure.repository.StudentRepository;
 import com.bosonit.DB1EjercicioCRUD.studentBranch.domain.StudentBranch;
 import com.bosonit.DB1EjercicioCRUD.studentBranch.infraestructure.controller.input.StudentBranchInputDTO;
@@ -28,7 +28,7 @@ public class StudentBranchServiceImpl implements StudentBranchService{
     private ProfesorRepository profesorRepository;
 
     @Override
-    public StudentBranchOutputDTO addStudentBranch(StudentBranchInputDTO studentBranchInputDTO) throws Exception {
+    public StudentBranchOutputDTO addStudentBranch(StudentBranchInputDTO studentBranchInputDTO) {
         System.err.println("ESTE ES EL ID ESTUDIANTE QUE NOS LLEGA A LA IMPLEMENTACION: " +studentBranchInputDTO.getIdProfesor());
 
         Optional<Profesor> profesor = profesorRepository.findById(studentBranchInputDTO.getIdProfesor());
@@ -49,10 +49,16 @@ public class StudentBranchServiceImpl implements StudentBranchService{
             System.out.println(s.toString());
         }*/
 
-        StudentBranch studentBranch = studentBranchInputDTO.studentBranchInputDTO(profesor.get());
 
-        studentBranchRepository.save(studentBranch);
-        return new StudentBranchOutputDTO(studentBranchRepository.save(studentBranch));
+        if (profesor.isPresent()) {
+            StudentBranch studentBranch = studentBranchInputDTO.studentBranchInputDTO(profesor.get());
+            studentBranchRepository.save(studentBranch);
+            return new StudentBranchOutputDTO(studentBranchRepository.save(studentBranch));
+        } else {
+            throw new EntityNotFoundException("DICHA ASIGNATURA NO HA SIDO POSIBLE ENCONTRARLA", 404);
+        }
+
+
     }
 
     @Override
@@ -67,5 +73,15 @@ public class StudentBranchServiceImpl implements StudentBranchService{
     @Override
     public void deleteStudentBranchByIdBranch(String idBranch) {
         studentBranchRepository.deleteById(idBranch);
+    }
+
+    @Override
+    public StudentBranch getStudentBranchById(String idBranch) {
+        Optional<StudentBranch> studentBranch =  studentBranchRepository.findById(idBranch);
+        if (studentBranch.isPresent()) {
+            return studentBranch.get();
+        } else {
+            throw new EntityNotFoundException("DICHA ASIGNATURA NO HA SIDO POSIBLE ENCONTRAR", 404);
+        }
     }
 }

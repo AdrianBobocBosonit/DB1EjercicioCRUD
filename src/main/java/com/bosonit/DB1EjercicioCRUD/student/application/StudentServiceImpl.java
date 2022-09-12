@@ -10,6 +10,7 @@ import com.bosonit.DB1EjercicioCRUD.student.domain.Student;
 import com.bosonit.DB1EjercicioCRUD.student.infraestructure.controller.input.StudentInputDTO;
 import com.bosonit.DB1EjercicioCRUD.student.infraestructure.controller.output.StudentOutputDTO;
 import com.bosonit.DB1EjercicioCRUD.student.infraestructure.repository.StudentRepository;
+import com.bosonit.DB1EjercicioCRUD.studentBranch.domain.StudentBranch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -90,13 +91,22 @@ public class StudentServiceImpl implements  StudentService{
     @Override
     public void deleteStudentByIdStudent(String idStudent) {
         Optional<Student> student = studentRepository.findById(idStudent);
-        studentRepository.delete(student.get());
+        if (student.isPresent()) {
+            studentRepository.delete(student.get());
+        } else {
+            throw new EntityNotFoundException("DICHO ESTUDIANTE NO SE HA PODIDO ENCONTRAR", 404);
+        }
     }
 
     @Override
     public void deleteStudentByIdPerson(String idPerson) {
         Student student = studentRepository.findByIdPersona(idPerson);
         studentRepository.delete(student);
+    }
+
+    @Override
+    public List<StudentBranch> getBranchByIdStudent(String idStudent) {
+        return null;
     }
 
 }

@@ -2,6 +2,7 @@ package com.bosonit.DB1EjercicioCRUD.student.application;
 
 import com.bosonit.DB1EjercicioCRUD.student.infraestructure.controller.input.StudentInputDTO;
 import com.bosonit.DB1EjercicioCRUD.student.infraestructure.controller.output.StudentOutputDTO;
+import com.bosonit.DB1EjercicioCRUD.studentBranch.domain.StudentBranch;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface StudentService {
     void deleteStudentByIdStudent(String idStudent);
 
     void deleteStudentByIdPerson(String idPerson);
+
+    List<StudentBranch> getBranchByIdStudent(String idStudent);
 }
