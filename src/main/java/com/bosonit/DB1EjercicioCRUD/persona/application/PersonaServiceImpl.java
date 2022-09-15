@@ -4,6 +4,7 @@ import com.bosonit.DB1EjercicioCRUD.exceptions.EntityNotFoundException;
 import com.bosonit.DB1EjercicioCRUD.exceptions.UnprocessableEntityException;
 import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.input.PersonaInputDTO;
+import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.output.PersonaCORSOutputDTO;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.output.PersonaOutputDTO;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.repository.PersonaRepository;
 import com.bosonit.DB1EjercicioCRUD.profesor.domain.Profesor;
@@ -13,7 +14,10 @@ import com.bosonit.DB1EjercicioCRUD.student.infraestructure.repository.StudentRe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +81,7 @@ public class PersonaServiceImpl implements PersonaService {
         }
 
         for (Persona p: personaList) {
-             listadoOut.add(new PersonaOutputDTO(p));
+            listadoOut.add(new PersonaOutputDTO(p));
          }
 
         return listadoOut;
@@ -121,12 +125,14 @@ public class PersonaServiceImpl implements PersonaService {
         PersonaOutputDTO personaOutputDTO;
 
         Persona persona = personaRepository.findById(idPersona).orElse(null);
+        if (persona == null) {
+            throw new EntityNotFoundException("NO SE PUTO ENCONTRAR A LA PERSONA A ASIGNAR", 404);
+        }
         System.err.println("ESTA ES LA PERSONA: " + persona);
 
         Profesor profesor = profesorRepository.findProfesorByIdPersona(idPersona);
         System.out.println("ESTE ES EL PROFESOR: " + profesor);
         if (profesor != null) {
-
             personaOutputDTO = new PersonaOutputDTO(persona, profesor);
             return personaOutputDTO;
         }
@@ -134,12 +140,49 @@ public class PersonaServiceImpl implements PersonaService {
         Student student = studentRepository.findByIdPersona(idPersona);
         System.out.println("ESTE ES EL STUDENT: " + student);
         if (student != null) {
-
             personaOutputDTO = new PersonaOutputDTO(persona, student);
             return personaOutputDTO;
         }
 
         System.err.println("HACER RETURN NULL");
         return null;
+    }
+
+    @Override
+    public List<PersonaCORSOutputDTO> getAllPersonCORS() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        List<PersonaOutputDTO> outputDTOList = getAllPersonas();
+        List<PersonaCORSOutputDTO> personaCORSOutputDTOS = new ArrayList<>();
+        for (PersonaOutputDTO p: outputDTOList) {
+            PersonaCORSOutputDTO personaCORSOutputDTO = new PersonaCORSOutputDTO();
+
+            personaCORSOutputDTO.setId(p.getId());
+            personaCORSOutputDTO.setUsuario(p.getUsuario());
+            personaCORSOutputDTO.setStudent(p.getStudent());
+            personaCORSOutputDTO.setProfesor(p.getProfesor());
+            personaCORSOutputDTO.setPassword(p.getPassword());
+            personaCORSOutputDTO.setName(p.getName());
+            personaCORSOutputDTO.setSurname(p.getSurname());
+            personaCORSOutputDTO.setCompany_email(p.getCompany_email());
+            personaCORSOutputDTO.setPersonal_email(p.getPersonal_email());
+            personaCORSOutputDTO.setCity(p.getCity());
+            personaCORSOutputDTO.setActive(p.getActive());
+
+            Date createDate = p.getCreated_date();
+            String strCreatedDate = dateFormat.format(createDate);
+
+            personaCORSOutputDTO.setCreated_date(strCreatedDate);
+            personaCORSOutputDTO.setImagen_url(p.getImagen_url());
+
+            Date terminationDate = p.getTermination_date();
+            String strTerminationDate = dateFormat.format(terminationDate);
+
+            personaCORSOutputDTO.setTermination_date(strTerminationDate);
+
+            personaCORSOutputDTOS.add(personaCORSOutputDTO);
+        }
+
+        return personaCORSOutputDTOS;
     }
 }

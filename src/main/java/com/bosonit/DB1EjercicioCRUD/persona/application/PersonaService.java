@@ -1,7 +1,7 @@
 package com.bosonit.DB1EjercicioCRUD.persona.application;
 
-import com.bosonit.DB1EjercicioCRUD.persona.domain.Persona;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.input.PersonaInputDTO;
+import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.output.PersonaCORSOutputDTO;
 import com.bosonit.DB1EjercicioCRUD.persona.infraestructure.controller.output.PersonaOutputDTO;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +22,6 @@ public interface PersonaService {
     PersonaOutputDTO updatePersonaById(String id, String password) throws Exception;
 
     PersonaOutputDTO findFullByIdPersona(String idPersona);
+
+    List<PersonaCORSOutputDTO> getAllPersonCORS();
 }
